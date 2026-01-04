@@ -2,12 +2,16 @@ interface ButtonProps {
     handleSearch: () => void;
     isLoading: boolean;
     isDisabled: boolean;
+    labelLoading?: string;
+    labelDefault?: string;
 }
 
 export default function CustomButton({
     handleSearch,
     isLoading,
-    isDisabled
+    isDisabled,
+    labelLoading,
+    labelDefault
 }: ButtonProps) {
     return (
         <button
@@ -17,7 +21,7 @@ export default function CustomButton({
             rounded-lg shadow-md hover:bg-blue-700 
             disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
         >
-            {isLoading ? "Searching..." : "Search"}
+            {isLoading ? labelLoading : labelDefault}
         </button>
     )
 }
