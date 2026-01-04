@@ -18,8 +18,8 @@ Follow these steps to run the project locally.
 
 1. **Clone the repository:**
    ```bash
-   git clone [https://github.com/alemontero7/weather-app.git](https://github.com/alemontero7/weather-app)
-   cd weather-app-hexagonal
+   git clone https://github.com/alemontero7/weather-app
+   cd weather-app
    ```
 2. **Install dependencies:**
     ```bash
