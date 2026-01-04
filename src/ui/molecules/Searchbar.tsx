@@ -26,7 +26,7 @@ export const SearchBar = ({
     return (
         <form
             onSubmit={handleSubmit}
-            className="relative w-full max-w-md"
+            className="relative w-full max-w-4xl"
         >
             <div className="relative group">
                 <input
@@ -37,7 +37,7 @@ export const SearchBar = ({
                     disabled={isLoading}
                     className="
                     w-full pl-4 pr-12 py-3 bg-white border-2 
-                    border-gray-200 rounded-full 
+                    border-gray-200 rounded-lg 
                     text-gray-700 placeholder-gray-400 
                     outline-none transition-all duration-300 
                     focus:border-blue-500 focus:shadow-lg 
