@@ -1,73 +1,71 @@
-# React + TypeScript + Vite
+# Weather App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, responsive weather dashboard built with **React**, **TypeScript**, and **Tailwind CSS**.
 
-Currently, two official plugins are available:
+This project implements **Hexagonal Architecture** on the frontend to decouple the User Interface from the Business Logic and External APIs, ensuring scalability, testability, and maintainability.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+[Project Preview](https://weather-app-by-ale.vercel.app/) 
 
-## React Compiler
+## Setting up the project
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Follow these steps to run the project locally.
 
-## Expanding the ESLint configuration
+### Prerequisites
+- Node.js (v18 or higher recommended)
+- npm or yarn
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Installation
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+1. **Clone the repository:**
+   ```bash
+   git clone [https://github.com/alemontero7/weather-app.git](https://github.com/alemontero7/weather-app)
+   cd weather-app-hexagonal
+   ```
+2. **Install dependencies:**
+    ```bash
+    npm install
+    ```
+3. **Env variables:**
+  Environment variables are available in the repo since a private API KEY is not needed to use the open meteo endpoints
+4. **Run the development server:**
+    ```bash
+    npm run dev
+    ```
+5. Open [This link](http://localhost:5173) in your browser
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Architecture
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+This project moves away from the traditional "Component-based" logic often seen in React (where logic is coupled inside useEffect within components) and adopts Hexagonal Architecture.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Why Hexagonal Architecture?
+  1. Decoupling: The UI components (atoms/molecules) know nothing about the API. They only expect pure Domain Models.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+  2. Interchangeability: We use Dependency Injection via Interfaces (ILocationRepository, IWeatherRepository). If we want to switch from Open-Meteo to OpenWeatherMap tomorrow, we only create a new Repository implementation. The UI and Use Cases remain untouched.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+  3. Data Safety: APIs often change or return "ugly" data (arrays, snake_case). We use Mappers and DTOs to sanitize data at the system boundary (Infrastructure Layer), ensuring our application works with clean, typed objects.
+
+### Layer Breakdown
+
+The code is organized by **Modules** and inside each module, we follow strict layers:
+
+* **Domain:**
+    * Holds the Entities/Models.
+    * Defines Interfaces/Ports.
+    * *Rule:* No external dependencies allowed here.
+* **Application (The Logic):**
+    * Contains Use Cases.
+    * Orchestrates the flow of data. It asks the Repository for data and gives it to the UI.
+* **Infrastructure (The Implementation):**
+    * **Repositories:** Concrete implementations.
+    * **DTOs:** Types that match the exact shape of the API JSON.
+    * **Mappers:** Functions that transform DTOs into Domain Models.
+* **UI (The Presentation):**
+    * **Atoms/Molecules:** Dumb components (buttons, cards) that only render data.
+    * **Pages:** Uses molecules to display a composed UI
+
+## Tech Stack
+* Core: React + Vite
+* Language: TypeScript
+* Styling: Tailwind CSS
+* Icons: Lucide React
+* Data Source: Open-Meteo API (Free, no key required)
