@@ -34,6 +34,8 @@ export class WeatherRepository implements IWeatherRepository {
 
             const data = await response.json();
 
+            console.log(data);
+
             if (!data) {
                 throw new Error("No weather data found");
             }

@@ -28,7 +28,6 @@ export default function WeatherPage() {
         try {
             const weatherResponse = await getWeatherUseCase.execute(city.latitude, city.longitude);
             setWeather(weatherResponse);
-            console.log(weatherResponse);
         } catch (error) {
             setError((error as Error).message);
         }
